@@ -4,7 +4,6 @@ module.exports = (app) => {
 
     app.get("/api/test", (req, res) => {
         console.log('got the test')
-        filters.test();
         res.send("Test Successful")
     });
 
