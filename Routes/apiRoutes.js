@@ -19,6 +19,6 @@ module.exports = (app) => {
 
     app.get("/api/getPlace/", async (req, res) => {
         const data = await filters.getPlace(req.query.visit || 0, req.query.date || false);
-        res.send(data);
+        res.json(data);
     });
 }
