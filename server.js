@@ -1,6 +1,5 @@
 const express = require('express');
 const axios = require('axios');
-const noblox = require('noblox.js');
 
 //Create express app and define port
 const app = express();
@@ -11,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 //Routing information
-require('./Routes/apiRoutes')(app, noblox);
+require('./Routes/apiRoutes')(app);
 
 //Start the server
 app.listen(PORT, () => {

@@ -1,4 +1,6 @@
-module.exports = (app, noblox) => {
+const filters = require('../Utils/filters');
+
+module.exports = (app) => {
 
     app.get("/api/test", (req, res) => {
         console.log('got the test')
@@ -6,7 +8,17 @@ module.exports = (app, noblox) => {
     });
 
     app.get("/api/placeData/:placeId", async (req, res) => {
-        const placeInfo = await noblox.getPlaceInfo(req.params.placeId);
-        res.json(placeInfo);
+        try {
+            const data = await filters.getPlaceInfo(req.params.placeId);
+            res.json(data);
+        } catch (error) {
+            res.send("Could not find that Place!");
+        }
+
+    });
+
+    app.get("/api/getPlace/", async (req, res) => {
+        const data = await filters.getPlace(req.query.visit, req.query.date);
+        console.log(data);
     });
 }
