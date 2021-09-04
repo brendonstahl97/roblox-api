@@ -68,7 +68,7 @@ const checkPlaceValidity = (rawData, visitFilter = 0, dateFilter = false) => {
         } else if (visitFilter == 2) {
             if (checkVisit(data, 1000, 10000)) {
                 visitVerified = true;
-                console.log("Found a game with visits between 10000 and 1000000");
+                console.log("Found a game with visits between 1000 and 10000");
             };
         } else if (visitFilter == 3) {
             if (checkVisit(data, 10000)) {
@@ -114,7 +114,7 @@ const filters = {
         const backupVisit = visitFilter;
         const backupDate = dateFilter;
         const backuptDetails = detailsFilter
-        const massPlaceData = await getMassPlaceData(50);
+        const massPlaceData = await getMassPlaceData(500);
         let verifiedPlace = null;
 
         //Iterate through all retreived places and determine if there is a valid place within the bunch
