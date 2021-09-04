@@ -1,7 +1,6 @@
 const filters = require('../Utils/filters');
 
 module.exports = (app) => {
-
     app.get("/api/test", (req, res) => {
         console.log('got the test')
         res.send("Test Successful")
@@ -13,12 +12,11 @@ module.exports = (app) => {
             res.json(data);
         } catch (error) {
             res.send("Could not find that Place!");
-        }
-
+        };
     });
 
     app.get("/api/getPlace/", async (req, res) => {
-        const data = await filters.getPlace(req.query.visit || 0, req.query.date || false);
+        const data = await filters.getPlace(req.query.visit || 0, req.query.date || false, req.query.details);
         res.json(data);
     });
 }

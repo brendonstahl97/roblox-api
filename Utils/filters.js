@@ -109,10 +109,11 @@ const filters = {
     //Find an eligable place based on specified filter info
     //VisitFilter: 0 = >1 view, 1 = between 1 and 1000 views, 2 = between 1000 and 10000 views, 3 = >10000 views
     //dateFilter: false = ignore update, true = ensure game has at least one update
-    getPlace: async (visitFilter = 0, dateFilter = false) => {
+    getPlace: async (visitFilter = 0, dateFilter = false, detailsFilter = false) => {
         //bakcup filter data for recursion
         const backupVisit = visitFilter;
         const backupDate = dateFilter;
+        const backuptDetails = detailsFilter
         const massPlaceData = await getMassPlaceData(50);
         let verifiedPlace = null;
 
@@ -121,7 +122,9 @@ const filters = {
             const isValid = checkPlaceValidity(massPlaceData[i], visitFilter, dateFilter);
             if (isValid) { 
                 console.log(`${massPlaceData[i].AssetId} is a verified place!`);
-                verifiedPlace = massPlaceData[i].AssetId;
+                if(detailsFilter) {
+                    verifiedPlace = massPlaceData[i];
+                } else {verifiedPlace = massPlaceData[i].AssetId;}
                 break;
             }
         };
@@ -130,7 +133,7 @@ const filters = {
             return verifiedPlace;
         };
 
-        return await filters.getPlace(backupVisit, backupDate);
+        return await filters.getPlace(backupVisit, backupDate, backuptDetails);
     }
 };
 
