@@ -1,4 +1,7 @@
 const noblox = require('noblox.js');
+const axios = require('axios');
+
+const popGamesUrl = 'https://www.roblox.com/games/list-json?sortFilter=1&MaxRows=1000';
 
 //generate a random place ID based on Roblox criteria
 const generatePlaceId = () => {
@@ -120,20 +123,43 @@ const filters = {
         //Iterate through all retreived places and determine if there is a valid place within the bunch
         for (let i = 0; i < massPlaceData.length; i++) {
             const isValid = checkPlaceValidity(massPlaceData[i], visitFilter, dateFilter);
-            if (isValid) { 
+            if (isValid) {
                 console.log(`${massPlaceData[i].AssetId} is a verified place!`);
-                if(detailsFilter) {
+                if (detailsFilter) {
                     verifiedPlace = massPlaceData[i];
-                } else {verifiedPlace = massPlaceData[i].AssetId;}
+                } else { verifiedPlace = massPlaceData[i].AssetId; }
                 break;
             }
         };
 
-        if(verifiedPlace != null) {
+        if (verifiedPlace != null) {
             return verifiedPlace;
         };
 
         return await filters.getPlace(backupVisit, backupDate, backuptDetails);
+    },
+
+    getPopularPlace: async (details) => {
+        try {
+            //Get popular games data
+            const { data } = await axios({
+                method: 'get',
+                url: popGamesUrl,
+            });
+
+            //Generate random index of the returned data
+            const randInt = Math.floor(Math.random() * data.length);
+
+            //determine whether or not to send all place details or just ID
+            if(details) {
+                return data[randInt]; 
+            } else {
+                return data[randInt].PlaceID; 
+            }      
+
+        } catch (error) {
+            console.trace(error);
+        };
     }
 };
 
