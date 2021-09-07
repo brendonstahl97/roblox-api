@@ -54,6 +54,11 @@ const checkUpdate = ({ Created, Updated }) => {
     return false;
 };
 
+//Generate a random integer based on the length of the provided array
+const getRandomInt = (arr) => {
+    return Math.floor(Math.random() * arr.length);
+};
+
 //Apply all filters to data
 const checkPlaceValidity = (rawData, visitFilter = 0, dateFilter = false) => {
     const data = rawData;
@@ -109,7 +114,7 @@ const filters = {
         return data;
     },
 
-    //Find an eligable place based on specified filter info
+    //Find an eligible place based on specified filter info
     //VisitFilter: 0 = >1 view, 1 = between 1 and 1000 views, 2 = between 1000 and 10000 views, 3 = >10000 views
     //dateFilter: false = ignore update, true = ensure game has at least one update
     getPlace: async (visitFilter = 0, dateFilter = false, detailsFilter = false) => {
@@ -139,6 +144,9 @@ const filters = {
         return await filters.getPlace(backupVisit, backupDate, backuptDetails);
     },
 
+    //Find an eligible place from a list of current top games 
+    //details: true = return all game data
+    //details: false = return only the game id 
     getPopularPlace: async (details) => {
         try {
             //Get popular games data
@@ -148,17 +156,52 @@ const filters = {
             });
 
             //Generate random index of the returned data
-            const randInt = Math.floor(Math.random() * data.length);
+            const randInt = getRandomInt(data);
 
             //determine whether or not to send all place details or just ID
-            if(details) {
-                return data[randInt]; 
+            if (details) {
+                return data[randInt];
             } else {
-                return data[randInt].PlaceID; 
-            }      
+                return data[randInt].PlaceID;
+            }
 
         } catch (error) {
             console.trace(error);
+        };
+    },
+
+    getRandFavGame: async (details) => {
+        try {
+            //retreive a game with at least one view that has been updated at least once
+            const tempGame = await filters.getPlace(0, true, true);
+
+            //grab userId from the retreived game
+            const userId = tempGame.BuilderId
+
+            //get the favorites list from the builder of 'tempGame'
+            const userFavData = await axios({
+                method: 'get',
+                url: `https://games.roblox.com/v2/users/${userId}/favorite/games?limit=50&sortOrder=Asc`
+            });
+
+            //Check to see if the user has any favorites
+            //If not, retry this function
+            if (userFavData.data.data.length < 1) {
+                return filters.getRandFavGame();
+            } else {
+
+                //Generate random index
+                const randInt = getRandomInt(userFavData.data.data);
+
+                //Check if the game details were requested
+                if(details) {
+                    return userFavData.data.data[randInt];
+                } else {
+                    return userFavData.data.data[randInt].id;
+                };
+            };
+        } catch (error) {
+            console.log(error);
         };
     }
 };
