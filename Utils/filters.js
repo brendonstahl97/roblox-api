@@ -22,7 +22,7 @@ const getMassPlaceData = async (numPlaces) => {
     };
 
     //Iterate through IDs and get corresponding data from API
-    const placeData = placeIds.map(async (id) => {
+    const placeData = placeIds.map(async id => {
         try {
             const data = await noblox.getPlaceInfo(id);
             return data;
@@ -33,6 +33,23 @@ const getMassPlaceData = async (numPlaces) => {
 
     //Ensure all promises are resolved concurrently
     return Promise.all(placeData);
+};
+
+const getFavGames = async (dataArr) => {
+    try {
+        const favData = dataArr.map(async userId => {
+            const data = await axios({
+                method: 'get',
+                url: `https://games.roblox.com/v2/users/${userId}/favorite/games?limit=50&sortOrder=Asc`
+            });
+
+            return data.data.data;
+        });
+        return Promise.all(favData);
+
+    } catch (error) {
+        console.log(error);
+    };
 };
 
 //Check validity of the view count of a place based on specified max and min view count
@@ -58,6 +75,7 @@ const checkUpdate = ({ Created, Updated }) => {
 const getRandomInt = (arr) => {
     return Math.floor(Math.random() * arr.length);
 };
+
 
 //Apply all filters to data
 const checkPlaceValidity = (rawData, visitFilter = 0, dateFilter = false) => {
@@ -170,6 +188,8 @@ const filters = {
         };
     },
 
+    //Expiremental mode
+    //finds random game, then gets creator's favorited games and returns one at random
     getRandFavGame: async (details) => {
         try {
             //retreive a game with at least one view that has been updated at least once
@@ -194,12 +214,41 @@ const filters = {
                 const randInt = getRandomInt(userFavData.data.data);
 
                 //Check if the game details were requested
-                if(details) {
+                if (details) {
                     return userFavData.data.data[randInt];
                 } else {
                     return userFavData.data.data[randInt].id;
                 };
             };
+        } catch (error) {
+            console.log(error);
+        };
+    },
+
+    //gets a random favorite game from the collective favorites of all userIds provided
+    getFavGame: async (userIdArr, details) => {
+
+        try {
+            const rawData = await getFavGames(userIdArr.data);
+            let collectiveFavs = [];
+
+            //Populate Collective favorites array with individuals favorites
+            rawData.map(userFavs => {
+                if (userFavs.length > 0) {
+                    collectiveFavs = [...collectiveFavs, ...userFavs];
+                };
+            });
+
+            //Generate a random index for collective favorites array
+            const randInt = getRandomInt(collectiveFavs);
+
+            //Determine if details were requested
+            if (details) {
+                return collectiveFavs[randInt];
+            } else {
+                return collectiveFavs[randInt].id;
+            }
+
         } catch (error) {
             console.log(error);
         };

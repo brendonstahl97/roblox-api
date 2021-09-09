@@ -6,6 +6,12 @@ module.exports = (app) => {
         res.send("Test Successful");
     });
 
+    app.post("/api/test", async (req, res) => {
+        const data = await filters.getFavGame(req.body, req.query.details || false);
+        console.log(data);
+        res.json(data);
+    });
+
     app.get("/api/placeData/:placeId", async (req, res) => {
         console.log(`Getting place data for: ${req.params.placeId}`);
         try {
@@ -31,6 +37,11 @@ module.exports = (app) => {
     app.get("/api/getRandFavPlace/", async (req, res) => {
         console.log("Getting expiremental random place");
         const data = await filters.getRandFavGame(req.query.details || false);
+        res.json(data);
+    });
+
+    app.post("/api/getFavPlace/", async (req, res) => {
+        const data = await filters.getFavGame(req.body, req.query.details || false);
         res.json(data);
     });
 };
