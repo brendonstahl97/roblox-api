@@ -217,7 +217,7 @@ const filters = {
                 if (details) {
                     return userFavData.data.data[randInt];
                 } else {
-                    return userFavData.data.data[randInt].id;
+                    return userFavData.data.data[randInt].rootPlace.id;
                 };
             };
         } catch (error) {
@@ -246,8 +246,8 @@ const filters = {
             if (details) {
                 return collectiveFavs[randInt];
             } else {
-                return collectiveFavs[randInt].id;
-            }
+                return collectiveFavs[randInt].rootPlace.id;
+            };
 
         } catch (error) {
             console.log(error);
