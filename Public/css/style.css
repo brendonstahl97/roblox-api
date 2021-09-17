@@ -1,0 +1,20 @@
+body {
+    background-color: rgb(48, 48, 48);
+}
+
+.card {
+    background-color: rgb(224, 38, 75);
+}
+
+h1 {
+    color: rgb(48, 48, 48);
+    text-shadow: 1px 1px rgb(163, 163, 163);
+}
+
+p {
+    font-size: 2vh;
+}
+
+.form-label {
+    font-size: 3vh;
+}

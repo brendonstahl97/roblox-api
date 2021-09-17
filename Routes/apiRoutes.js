@@ -1,4 +1,5 @@
 const filters = require('../Utils/filters');
+const curatedPlace = require('../Models/curatedPlace');
 
 module.exports = (app) => {
     app.get("/api/test", async (req, res) => {
@@ -13,7 +14,6 @@ module.exports = (app) => {
     });
 
     app.get("/api/placeData/:placeId", async (req, res) => {
-        console.log(`Getting place data for: ${req.params.placeId}`);
         try {
             const data = await filters.getPlaceInfo(req.params.placeId);
             res.json(data);
@@ -44,4 +44,32 @@ module.exports = (app) => {
         const data = await filters.getFavGame(req.body, req.query.details || false);
         res.json(data);
     });
+
+    app.post("/api/admin/curated", async ({ body }, res) => {
+        try {
+            const data = await filters.getPlaceInfo(body.placeId);
+
+            const filter = { placeId: data.AssetId };
+            const update = {
+                name: data.Name,
+                data: data
+            };
+
+            curatedPlace.findOneAndUpdate(filter, update, {
+                new: true,
+                upsert: true
+            }).then(dbTransaction => {
+                console.log(dbTransaction)
+                res.send("PAYLOAD DELIVERED. Nice work busting into their mainframe")
+            }).catch(err => {
+                console.log(err);
+                res.send("You've failed. Try again")
+            });
+
+        } catch (error) {
+            console.log(error);
+        };
+    });
 };
+
+//Place Roulette: 1447149383
