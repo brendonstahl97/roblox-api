@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8080;
 //Data parsing setup
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/Public'));
 
 //Database Connection
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/Roblox_Test", { 
