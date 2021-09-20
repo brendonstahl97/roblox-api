@@ -49,7 +49,7 @@ module.exports = (app) => {
 
     app.post("/api/admin/curated", async ({ body }, res) => {
         const success = await submissions.submit(curatedPlace, body.placeId);
-
+        
         if(success) {
             res.send("PAYLOAD DELIVERED. Nice work busting into their mainframe");
         } else {
