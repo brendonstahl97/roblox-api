@@ -1,5 +1,7 @@
 const filters = require('../Utils/filters');
+const submissions = require('../Utils/submissions');
 const curatedPlace = require('../Models/curatedPlace');
+const oldPlace = require('../Models/oldPlace');
 
 module.exports = (app) => {
     app.get("/api/test", async (req, res) => {
@@ -46,29 +48,24 @@ module.exports = (app) => {
     });
 
     app.post("/api/admin/curated", async ({ body }, res) => {
-        try {
-            const data = await filters.getPlaceInfo(body.placeId);
+        const success = await submissions.submit(curatedPlace, body.placeId);
 
-            const filter = { placeId: data.AssetId };
-            const update = {
-                name: data.Name,
-                data: data
-            };
-
-            curatedPlace.findOneAndUpdate(filter, update, {
-                new: true,
-                upsert: true
-            }).then(dbTransaction => {
-                console.log(dbTransaction)
-                res.send("PAYLOAD DELIVERED. Nice work busting into their mainframe")
-            }).catch(err => {
-                console.log(err);
-                res.send("You've failed. Try again")
-            });
-
-        } catch (error) {
-            console.log(error);
+        if(success) {
+            res.send("PAYLOAD DELIVERED. Nice work busting into their mainframe");
+        } else {
+            res.send("You've failed. Try again");
         };
+    });
+
+    app.post("/api/admin/old", async ({ body }, res) => {
+        const success = await submissions.submit(oldPlace, body.placeId);
+
+        if(success) {
+            res.send("PAYLOAD DELIVERED. Nice work busting into their mainframe");
+        } else {
+            res.send("You've failed. Try again");
+        };
+
     });
 };
 
