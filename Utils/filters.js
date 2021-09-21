@@ -256,14 +256,24 @@ const filters = {
         };
     },
 
-    getCuratedPlace: async() => {
+    getCuratedPlace: async(details) => {
         const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]);
-        console.log(data);
+        
+        if (details) {
+            return data.data;
+        } else {
+            return data.placeId;
+        };
     },
 
-    getOldPlace: async() => {
+    getOldPlace: async(details) => {
         const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]);
-        console.log(data);
+        
+        if (details) {
+            return data.data;
+        } else {
+            return data.placeId;
+        };
     }
 };
 
