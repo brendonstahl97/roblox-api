@@ -42,6 +42,14 @@ module.exports = (app) => {
         res.json(data);
     });
 
+    app.get("/api/getCuratedPlace/", async (req, res) => {
+        filters.getCuratedPlace();
+    });
+
+    app.get("/api/getOldPlace/", async (req, res) => {
+        filters.getOldPlace();
+    });
+
     app.post("/api/getFavPlace/", async (req, res) => {
         const data = await filters.getFavGame(req.body, req.query.details || false);
         res.json(data);

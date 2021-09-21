@@ -1,5 +1,7 @@
 const noblox = require('noblox.js');
 const axios = require('axios');
+const oldPlace = require('../Models/oldPlace');
+const curatedPlace = require('../Models/curatedPlace');
 
 const popGamesUrl = 'https://www.roblox.com/games/list-json?sortFilter=1&MaxRows=1000';
 
@@ -252,6 +254,16 @@ const filters = {
         } catch (error) {
             console.log(error);
         };
+    },
+
+    getCuratedPlace: async() => {
+        const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]);
+        console.log(data);
+    },
+
+    getOldPlace: async() => {
+        const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]);
+        console.log(data);
     }
 };
 

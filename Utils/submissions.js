@@ -18,10 +18,9 @@ const submissions = {
                 console.log(err);
             });
 
-            console.log(res);
             return true;
         } catch (error) {
-            console.log(error);
+            console.error(error);
         };
     }
 };
