@@ -140,7 +140,7 @@ const filters = {
         const backupVisit = visitFilter;
         const backupDate = dateFilter;
         const backuptDetails = detailsFilter
-        const massPlaceData = await getMassPlaceData(500);
+        const massPlaceData = await getMassPlaceData(50);
         let verifiedPlace = null;
 
         //Iterate through all retreived places and determine if there is a valid place within the bunch

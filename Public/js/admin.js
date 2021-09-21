@@ -3,8 +3,8 @@ const targetCollection = $(".targetMainframe");
 const submitBtn = $(".payloadBtn");
 
 //test
-const curatedURL = process.env.URL + '/api/admin/curated' || 'http://localhost:8080/api/admin/curated';
-const oldURL = process.env.URL + '/api/admin/old' || 'http://localhost:8080/api/admin/old';
+const curatedURL = 'https://rb6766767.herokuapp.com/api/admin/curated';
+const oldURL = 'https://rb6766767.herokuapp.com/api/admin/old';
 
 submitBtn.on('click', e => {
     e.preventDefault();
