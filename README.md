@@ -69,6 +69,16 @@ Returns a place from our list of old games.
 
 ---
 
+```/api/getAnimePlace/```
+
+Returns a random place with Anime in the name.
+
+**Query Options:**
+
+```?details``` determines if the game details for the place should be returned (```true```), or only the Place ID (```false```).
+
+---
+
 ### Post
 
 ```/api/getFavPlace/```

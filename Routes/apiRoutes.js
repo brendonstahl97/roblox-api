@@ -41,6 +41,11 @@ module.exports = (app) => {
         res.json(data);
     });
 
+    app.get("/api/getAnimePlace/", async (req, res) => {
+        const data = await filters.getAnimePlace(req.query.details || false);
+        res.json(data);
+    });
+
     app.post("/api/getFavPlace/", async (req, res) => {
         const data = await filters.getFavGame(req.body, req.query.details || false);
         res.json(data);

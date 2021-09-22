@@ -126,6 +126,32 @@ const checkPlaceValidity = (rawData, visitFilter = 0, dateFilter = false) => {
     return false;
 };
 
+/**
+Returns a game from the provided array whose name contains a specified string
+**/
+const checkForString = (desiredString, dataArr) => {
+    let capitalized;
+
+    if (desiredString.charAt(0).toUpperCase() == desiredString.charAt(0)) {
+        capitalized = true;
+    } else {
+        capitalized = false;
+    };
+
+    const randInt = getRandomInt(dataArr);
+    const gameName = dataArr[randInt].name;
+    const altString = (capitalized) ?
+        desiredString.charAt(0).toLowerCase() + desiredString.slice(1)
+        :
+        desiredString.charAt(0).toUpperCase() + desiredString.slice(1);
+
+    if (gameName.includes(desiredString) || gameName.includes(altString)) {
+        return dataArr[randInt];
+    } else {
+        return checkForString(desiredString, dataArr);
+    };
+};
+
 
 const filters = {
     //Get general place info from a given placeID
@@ -256,9 +282,9 @@ const filters = {
         };
     },
 
-    getCuratedPlace: async(details) => {
+    getCuratedPlace: async (details) => {
         const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]);
-        
+
         if (details) {
             return data.data;
         } else {
@@ -266,13 +292,28 @@ const filters = {
         };
     },
 
-    getOldPlace: async(details) => {
+    getOldPlace: async (details) => {
         const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]);
-        
+
         if (details) {
             return data.data;
         } else {
             return data.placeId;
+        };
+    },
+
+    getAnimePlace: async (details) => {
+        const { data } = await axios({
+            method: 'get',
+            url: 'https://games.roblox.com/v1/games/list?model.keyword=Anime&model.maxRows=300'
+        });
+
+        const game = checkForString('Anime', data.games);
+
+        if(details) {
+            return game;
+        } else {
+            return game.placeId;
         };
     }
 };
