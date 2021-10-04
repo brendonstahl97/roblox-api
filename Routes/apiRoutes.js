@@ -2,6 +2,7 @@ const filters = require('../Utils/filters');
 const submissions = require('../Utils/submissions');
 const curatedPlace = require('../Models/curatedPlace');
 const oldPlace = require('../Models/oldPlace');
+const halloweenPlace = require('../Models/halloweenPlace');
 
 module.exports = (app) => {
     app.get("/api/placeData/:placeId", async (req, res) => {
@@ -46,6 +47,11 @@ module.exports = (app) => {
         res.json(data);
     });
 
+    app.get("/api/getHalloweenPlace/", async (req, res) => {
+        const data = await filters.getHalloweenPlace(req.query.details || false);
+        res.json(data);
+    });
+
     app.post("/api/getFavPlace/", async (req, res) => {
         const data = await filters.getFavGame(req.body, req.query.details || false);
         res.json(data);
@@ -63,6 +69,17 @@ module.exports = (app) => {
 
     app.post("/api/admin/old", async ({ body }, res) => {
         const success = await submissions.submit(oldPlace, body.placeId);
+
+        if (success) {
+            res.send("PAYLOAD DELIVERED. Nice work busting into their mainframe");
+        } else {
+            res.send("You've failed. Try again");
+        };
+
+    });
+
+    app.post("/api/admin/halloween", async ({ body }, res) => {
+        const success = await submissions.submit(halloweenPlace, body.placeId);
 
         if (success) {
             res.send("PAYLOAD DELIVERED. Nice work busting into their mainframe");

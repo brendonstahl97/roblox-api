@@ -1,7 +1,9 @@
 const noblox = require('noblox.js');
 const axios = require('axios');
+
 const oldPlace = require('../Models/oldPlace');
 const curatedPlace = require('../Models/curatedPlace');
+const halloweenPlace = require('../Models/halloweenPlace');
 
 const popGamesUrl = 'https://www.roblox.com/games/list-json?sortFilter=1&MaxRows=1000';
 
@@ -283,23 +285,33 @@ const filters = {
     },
 
     getCuratedPlace: async (details) => {
-        const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]);
+        try {
+            const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]);
 
-        if (details) {
-            return data.data;
-        } else {
-            return data.placeId;
+            if (details) {
+                return data.data;
+            } else {
+                return data.placeId;
+            };
+        } catch (error) {
+            console.log(error);
         };
+
     },
 
     getOldPlace: async (details) => {
-        const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]);
+        try {
+            const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]);
 
-        if (details) {
-            return data.data;
-        } else {
-            return data.placeId;
+            if (details) {
+                return data.data;
+            } else {
+                return data.placeId;
+            };
+        } catch (error) {
+            console.log(error);
         };
+
     },
 
     getAnimePlace: async (details) => {
@@ -310,11 +322,27 @@ const filters = {
 
         const game = checkForString('Anime', data.games);
 
-        if(details) {
+        if (details) {
             return game;
         } else {
             return game.placeId;
         };
+    },
+
+    getHalloweenPlace: async (details) => {
+        try {
+            const data = await halloweenPlace.aggregate([{ $sample: { size: 1 } }]);
+
+            if (details) {
+                return data.data;
+            } else {
+                return data.placeId;
+            };
+
+        } catch (error) {
+            console.log(error);
+        };
+
     }
 };
 

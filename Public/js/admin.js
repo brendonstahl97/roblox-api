@@ -2,25 +2,50 @@ const idInput = $("#PlaceIDInput");
 const targetCollection = $(".targetMainframe");
 const submitBtn = $(".payloadBtn");
 
-//test
 const curatedURL = 'https://rb6766767.herokuapp.com/api/admin/curated';
 const oldURL = 'https://rb6766767.herokuapp.com/api/admin/old';
+const halloweenURL = 'https://rb6766767.herokuapp.com/api/admin/halloween';
+
+const postToDb = (collectionUrl, placeIdObj) => {
+    $.post(collectionUrl, placeIdObj, (data, status) => {
+        alert(data);
+    });
+};
 
 submitBtn.on('click', e => {
     e.preventDefault();
 
-    const placeId = {
+    const placeIdObj = {
         placeId: parseInt(idInput.val())
     };
 
-    if (targetCollection.val() == 1) {
-        $.post(curatedURL, placeId, (data, status) => {
-            console.log(status);
-            alert(data);
-        });
-    } else if (targetCollection.val() == 2) {
-        $.post(oldURL, placeId, (data, status) => {
-            alert(data);
-        });
+    switch (targetCollection.val()) {
+        case '1':
+            try {
+                postToDb(curatedURL, placeIdObj);
+            } catch (error) {
+                console.log(error);
+            }
+            break;
+
+        case '2':
+            try {
+                postToDb(oldURL, placeIdObj);
+            } catch (error) {
+                console.log(error);
+            }
+            break;
+
+        case '3':
+            try {
+                console.log('halloween');
+                postToDb(halloweenURL, placeIdObj);
+            } catch (error) {
+                console.log(error);
+            }
+            break;
+
+        default:
+            break;
     };
 });
