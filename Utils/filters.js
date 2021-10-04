@@ -288,9 +288,9 @@ const filters = {
             const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]).catch(err => {console.log(err)});
 
             if (details) {
-                return data.data;
+                return data[0].data;
             } else {
-                return data.placeId;
+                return data[0].placeId;
             };
     },
 
@@ -298,9 +298,9 @@ const filters = {
             const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]).catch(err => {console.log(err)});
 
             if (details) {
-                return data.data;
+                return data[0].data;
             } else {
-                return data.placeId;
+                return data[0].placeId;
             };
     },
 
@@ -320,12 +320,12 @@ const filters = {
     },
 
     getHalloweenPlace: async (details) => {
-
             const data = await halloweenPlace.aggregate([{ $sample: { size: 1 } }]).catch(err => {console.log(err)});
+            console.log(data);
             if (details) {
-                return data.data;
+                return data[0].data;
             } else {
-                return data.placeId;
+                return data[0].placeId;
             };
     }
 };
