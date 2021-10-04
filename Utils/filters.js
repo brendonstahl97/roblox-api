@@ -285,33 +285,23 @@ const filters = {
     },
 
     getCuratedPlace: async (details) => {
-        try {
-            const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]);
+            const data = await curatedPlace.aggregate([{ $sample: { size: 1 } }]).catch(err => {console.log(err)});
 
             if (details) {
                 return data.data;
             } else {
                 return data.placeId;
             };
-        } catch (error) {
-            console.log(error);
-        };
-
     },
 
     getOldPlace: async (details) => {
-        try {
-            const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]);
+            const data = await oldPlace.aggregate([{ $sample: { size: 1 } }]).catch(err => {console.log(err)});
 
             if (details) {
                 return data.data;
             } else {
                 return data.placeId;
             };
-        } catch (error) {
-            console.log(error);
-        };
-
     },
 
     getAnimePlace: async (details) => {
@@ -330,19 +320,13 @@ const filters = {
     },
 
     getHalloweenPlace: async (details) => {
-        try {
-            const data = await halloweenPlace.aggregate([{ $sample: { size: 1 } }]);
 
+            const data = await halloweenPlace.aggregate([{ $sample: { size: 1 } }]).catch(err => {console.log(err)});
             if (details) {
                 return data.data;
             } else {
                 return data.placeId;
             };
-
-        } catch (error) {
-            console.log(error);
-        };
-
     }
 };
 
