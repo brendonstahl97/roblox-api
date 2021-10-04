@@ -321,7 +321,6 @@ const filters = {
 
     getHalloweenPlace: async (details) => {
             const data = await halloweenPlace.aggregate([{ $sample: { size: 1 } }]).catch(err => {console.log(err)});
-            console.log(data);
             if (details) {
                 return data[0].data;
             } else {
