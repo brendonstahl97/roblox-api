@@ -23,7 +23,7 @@ Return a random place.
 
 ```?details``` determines if the game details for the place should be returned (```true```), or only the Place ID (```false```).
 
-Example: to get a game that has more than 10000 visits and has been updated at least once you would use the URL ```https://rb6766767.herokuapp.com/api/getPlace/?visit=3&date=true```.
+Example: to get a game that has more than 10000 visits and has been updated at least once you would use the URL ```https://roblox-custom-api.onrender.com/api/getPlace?visit=3&date=true```.
 
 ---
 
